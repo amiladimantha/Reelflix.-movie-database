@@ -1,5 +1,6 @@
 ![image](https://github.com/amiladimantha/Reelflix.-movie-database/assets/84844150/417f4c6f-574a-4040-896f-74a2a4fbb42e)
-![image](https://github.com/amiladimantha/Reelflix.-movie-database/assets/84844150/cb3907bb-141e-416e-84f0-955fd426ffcb)
+![image](https://github.com/amiladimantha/Reelflix.-movie-database/assets/84844150/d04bb783-a245-4db1-9772-808e5bf59832)
+
 
 
 
