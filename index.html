@@ -4,94 +4,82 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>flix Finder</title>
-    <!-- font awesome icons cdn -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- custom css -->
-    <link rel = "stylesheet" href = "main.css">
+    <title>ReelFlix — Movie Finder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    
-    <div class = "wrapper">
-        <!-- logo -->
-        <div class = "logo">
-            <div class = "container">
-                <p>Reel<span>flix.</span></p>
-            </div>
-        </div>
-        <!-- end of logo -->
-        <!-- search container -->
-        <div class = "search-container">
-            <div class = "search-element">
-                <h3>Search Movie:</h3>
-                <input type = "text" class = "form-control" placeholder="Search Movie Title ..." id = "movie-search-box" onkeyup="findMovies()" onclick = "findMovies()">
 
-                <div class = "search-list" id = "search-list">
-                    <!-- list here -->
-                    <div class = "search-list-item">
-                        <div class = "search-item-thumbnail">
-                            <img src = "medium-cover.jpg">
-                        </div>
-                        <div class = "search-item-info">
-                            <h3>Guardians of the Galaxy Vol. 2</h3>
-                            <p>2017</p>
-                        </div>
-                    </div> 
+    <div class="wrapper">
+
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container nav-inner">
+                <a class="brand" href="#">Reel<span>Flix</span></a>
+
+            </div>
+        </nav>
+
+        <!-- HERO / SEARCH -->
+        <header class="hero">
+            <div class="hero-glow hero-glow-1"></div>
+            <div class="hero-glow hero-glow-2"></div>
+            <div class="container hero-content">
+                <div class="hero-badge"><i class="fas fa-bolt"></i> Powered by OMDb</div>
+                <h1>Find Any <span>Movie</span>,<br>Instantly.</h1>
+                <p class="hero-sub">Search millions of film titles, explore ratings, cast, plots and more.</p>
+
+                <div class="search-element">
+                    <div class="search-input-wrap">
+                        <i class="fas fa-search search-icon"></i>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Search a movie title…"
+                            id="movie-search-box"
+                            onkeyup="findMovies()"
+                            onclick="findMovies()"
+                            autocomplete="off"
+                        >
+                        <button class="clear-btn" id="clear-btn" onclick="clearSearch()" aria-label="Clear search">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="search-list hide-search-list" id="search-list"></div>
                 </div>
             </div>
-        </div>
-        <!-- end of search container -->
+        </header>
 
-        <!-- result container -->
-        <div class = "container">
-            <div class = "result-container">
-                <div class = "result-grid" id = "result-grid">
-                    <!-- movie information here -->
-                    <div class = "movie-poster">
-                        <img src = "medium-cover.jpg" alt = "movie poster">
-                    </div>
-                    <div class = "movie-info">
-                        <h3 class = "movie-title">Guardians of the Galaxy Vol. 2</h3>
-                        <ul class = "movie-misc-info">
-                            <li class = "year">Year: 2017</li>
-                            <li class = "rated">Ratings: PG-13</li>
-                            <li class = "released">Released: 05 May 2017</li>
-                        </ul>
-                        <p class = "genre"><b>Genre:</b> Action, Adventure, Comedy</p>
-                        <p class = "writer"><b>Writer:</b> James Gunn, Don Abnett, Andy Lanning</p>
-                        <p class = "actors"><b>Actors: </b>Chris Pratt, Zoe Saldana, Dave Bautista</p>
-                        <p class = "plot"><b>Plot:</b> The Guardians struggle to keep together as a team while dealing with their personal family issues, notably Star-Lord's ecounter with his father the ambitious celestial being Ego.</p>
-                        <p class = "language"><b>Language:</b> English</p>
-                        <p class = "awards"><b><i class = "fas fa-award"></i></b> Nominated for 1 Oscar</p>
-                    </div>
-                </div>
+        <!-- RESULT -->
+        <main class="container">
+            <div class="result-container">
+                <div class="result-grid" id="result-grid"></div>
             </div>
-        </div>
-        <!-- end of result container -->
+        </main>
+
     </div>
-	<footer>
+
+    <!-- FOOTER -->
+    <footer>
         <div class="footer-content">
-            <div class = "logo">
-                <div class = "container">
-                    <p>Reel<span>flix.</span></p>
-                </div>
-            </div>
+            <a class="brand footer-brand" href="#">Reel<span>Flix</span></a>
+            <p>Your ultimate destination for movie information.</p>
             <ul class="socials">
-                <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa-brands fa-google-plus"></i></a></li>
-                <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
-                <li><a href="#"><i class="fa-brands fa-linkedin"></i></a></li>
+                <li><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+                <li><a href="#" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a></li>
+                <li><a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a></li>
+                <li><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                <li><a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a></li>
             </ul>
         </div>
         <div class="footer-bottom">
-            <p>copyright &copy; <a href="#">Reelflix.</a>  </p>
+            <p>© 2026 <a href="#">ReelFlix</a>. All rights reserved.</p>
         </div>
-
     </footer>
 
-
-    <!-- movie app js -->
-    <script src = "script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
