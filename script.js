@@ -123,6 +123,12 @@ function displayMovieDetails(details){
         <p class="language"><i class="fas fa-globe" style="margin-right:5px"></i>${details.Language}</p>
 
         <p class="awards"><i class="fas fa-award"></i> ${details.Awards}</p>
+
+        <div class="movie-actions">
+            <a class="imdb-btn" href="https://www.imdb.com/title/${details.imdbID}/" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg" alt="IMDb" class="imdb-logo"> View on IMDb
+            </a>
+        </div>
     </div>
     `;
 }
