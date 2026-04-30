@@ -19,7 +19,12 @@
         <nav class="navbar">
             <div class="container nav-inner">
                 <a class="brand" href="#">Reel<span>Flix</span></a>
-
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#" onclick="showWatchlist()"><i class="fas fa-heart"></i> Watchlist</a></li>
+                </ul>
             </div>
         </nav>
 
@@ -44,23 +49,53 @@
                             onclick="findMovies()"
                             autocomplete="off"
                         >
+                        <select class="type-filter" id="type-filter" onchange="findMovies()">
+                            <option value="">All Types</option>
+                            <option value="movie">Movies</option>
+                            <option value="series">Series</option>
+                            <option value="episode">Episodes</option>
+                        </select>
                         <button class="clear-btn" id="clear-btn" onclick="clearSearch()" aria-label="Clear search">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <div class="search-list hide-search-list" id="search-list"></div>
                 </div>
+                <!-- Search History Chips -->
+                <div class="search-history" id="search-history"></div>
             </div>
         </header>
+
+        <!-- TRENDING SECTION -->
+        <section class="trending-section" id="trending-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-fire"></i> Trending Movies</h2>
+                <div class="trending-grid" id="trending-grid"></div>
+            </div>
+        </section>
 
         <!-- RESULT -->
         <main class="container">
             <div class="result-container">
+                <div class="browse-grid" id="browse-grid"></div>
                 <div class="result-grid" id="result-grid"></div>
             </div>
         </main>
 
     </div>
+
+    <!-- TRAILER MODAL -->
+    <div class="modal-overlay" id="trailer-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTrailerModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-body" id="trailer-body"></div>
+        </div>
+    </div>
+
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top-btn" id="scroll-top-btn" onclick="scrollToTop()" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
     <!-- FOOTER -->
     <footer>
