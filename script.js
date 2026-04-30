@@ -12,8 +12,6 @@ const searchHistoryContainer = document.getElementById('search-history');
 const trailerModal = document.getElementById('trailer-modal');
 const trailerBody = document.getElementById('trailer-body');
 const scrollTopBtn = document.getElementById('scroll-top-btn');
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('nav-links');
 
 // ============= UTILITIES =============
 // Sanitize HTML to prevent XSS
@@ -22,42 +20,6 @@ function sanitize(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
-}
-
-// ============= WATCHLIST (localStorage) =============
-function getWatchlist() {
-    return JSON.parse(localStorage.getItem('reelflix-watchlist') || '[]');
-}
-
-function saveWatchlist(list) {
-    localStorage.setItem('reelflix-watchlist', JSON.stringify(list));
-}
-
-function isInWatchlist(imdbID) {
-    return getWatchlist().some(m => m.imdbID === imdbID);
-}
-
-function toggleWatchlist(movie) {
-    let list = getWatchlist();
-    const idx = list.findIndex(m => m.imdbID === movie.imdbID);
-    if (idx > -1) {
-        list.splice(idx, 1);
-    } else {
-        list.push({ imdbID: movie.imdbID, Title: movie.Title, Poster: movie.Poster, Year: movie.Year });
-    }
-    saveWatchlist(list);
-    return idx === -1; // returns true if added
-}
-
-function showWatchlist() {
-    const list = getWatchlist();
-    if (list.length === 0) {
-        browseGrid.innerHTML = `<div class="empty-state"><i class="fas fa-heart"></i><p>Your watchlist is empty</p></div>`;
-        resultGrid.innerHTML = '';
-        return;
-    }
-    displayBrowseGrid(list, true);
-    resultGrid.innerHTML = '';
 }
 
 // ============= SEARCH HISTORY =============
@@ -133,14 +95,10 @@ async function loadTrendingMovies() {
 function renderTrendingGrid(movies) {
     trendingGrid.innerHTML = movies.map(m => {
         const poster = m.Poster !== 'N/A' ? m.Poster : 'image_not_found.png';
-        const inWatchlist = isInWatchlist(m.imdbID);
         return `
         <div class="movie-card" data-id="${m.imdbID}">
             <div class="card-poster">
                 <img src="${poster}" alt="${sanitize(m.Title)}" loading="lazy">
-                <button class="watchlist-btn ${inWatchlist ? 'active' : ''}" onclick="event.stopPropagation(); handleWatchlistToggle('${m.imdbID}', this)" aria-label="Add to watchlist">
-                    <i class="fas fa-heart"></i>
-                </button>
                 ${m.imdbRating && m.imdbRating !== 'N/A' ? `<span class="card-rating"><i class="fas fa-star"></i> ${m.imdbRating}</span>` : ''}
             </div>
             <div class="card-info">
@@ -254,22 +212,18 @@ function displayMovieList(movies){
 }
 
 // ============= BROWSE GRID (clickable cards) =============
-function displayBrowseGrid(movies, isWatchlist = false) {
+function displayBrowseGrid(movies) {
     browseGrid.innerHTML = `
         <div class="browse-header">
-            <h3>${isWatchlist ? '<i class="fas fa-heart"></i> Your Watchlist' : '<i class="fas fa-th"></i> Browse Results'}</h3>
+            <h3><i class="fas fa-th"></i> Browse Results</h3>
         </div>
         <div class="browse-cards">
             ${movies.map(m => {
                 const poster = m.Poster !== 'N/A' ? m.Poster : 'image_not_found.png';
-                const inWatchlist = isInWatchlist(m.imdbID);
                 return `
                 <div class="movie-card" data-id="${m.imdbID}">
                     <div class="card-poster">
                         <img src="${poster}" alt="${sanitize(m.Title)}" loading="lazy">
-                        <button class="watchlist-btn ${inWatchlist ? 'active' : ''}" onclick="event.stopPropagation(); handleWatchlistToggle('${m.imdbID}', this)" aria-label="Toggle watchlist">
-                            <i class="fas fa-heart"></i>
-                        </button>
                     </div>
                     <div class="card-info">
                         <h4>${sanitize(m.Title)}</h4>
@@ -283,18 +237,6 @@ function displayBrowseGrid(movies, isWatchlist = false) {
     browseGrid.querySelectorAll('.movie-card').forEach(card => {
         card.addEventListener('click', () => loadAndDisplayDetails(card.dataset.id));
     });
-}
-
-// Handle watchlist toggle from card button
-async function handleWatchlistToggle(imdbID, btn) {
-    // Fetch minimal info if needed
-    let movie = getWatchlist().find(m => m.imdbID === imdbID);
-    if (!movie) {
-        const res = await fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=fc1fef96`);
-        movie = await res.json();
-    }
-    const added = toggleWatchlist(movie);
-    btn.classList.toggle('active', added);
 }
 
 // ============= DETAILS CLICK HANDLERS =============
@@ -342,7 +284,6 @@ async function loadAndDisplayDetails(imdbID) {
 // ============= DISPLAY MOVIE DETAILS =============
 function displayMovieDetails(details){
     const poster = (details.Poster !== "N/A") ? details.Poster : "image_not_found.png";
-    const inWatchlist = isInWatchlist(details.imdbID);
 
     // Build genre tags
     const genreTags = details.Genre
@@ -383,12 +324,7 @@ function displayMovieDetails(details){
         <img src="${poster}" alt="${sanitize(details.Title)} poster" loading="lazy">
     </div>
     <div class="movie-info">
-        <div class="title-row">
-            <h3 class="movie-title">${sanitize(details.Title)}</h3>
-            <button class="watchlist-lg-btn ${inWatchlist ? 'active' : ''}" onclick="handleDetailsWatchlist(this)" data-id="${details.imdbID}" data-title="${sanitize(details.Title)}" data-poster="${poster}" data-year="${details.Year}">
-                <i class="fas fa-heart"></i> ${inWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
-            </button>
-        </div>
+        <h3 class="movie-title">${sanitize(details.Title)}</h3>
 
         <div class="ratings-row">${ratingsHTML}</div>
 
@@ -420,18 +356,6 @@ function displayMovieDetails(details){
         </div>
     </div>
     `;
-}
-
-function handleDetailsWatchlist(btn) {
-    const movie = {
-        imdbID: btn.dataset.id,
-        Title: btn.dataset.title,
-        Poster: btn.dataset.poster,
-        Year: btn.dataset.year
-    };
-    const added = toggleWatchlist(movie);
-    btn.classList.toggle('active', added);
-    btn.innerHTML = `<i class="fas fa-heart"></i> ${added ? 'In Watchlist' : 'Add to Watchlist'}`;
 }
 
 // ============= TRAILER MODAL =============
@@ -498,20 +422,10 @@ function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============= HAMBURGER MENU =============
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('open');
-});
-
 // ============= CLICK OUTSIDE =============
 window.addEventListener('click', (event) => {
     if(!event.target.closest('.search-element')){
         searchList.classList.add('hide-search-list');
-    }
-    if(!event.target.closest('.nav-inner')) {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('open');
     }
 });
 
